@@ -11,8 +11,11 @@ class GamePreload {
 		game.load.image("title", "Assets/heatstroke.png");
 		game.load.image("playbutton","Assets/button.png");
 		game.load.bitmapFont("font", "Assets/face.png","Assets/font.fnt");
-		game.load.audio("bgmusic", ["assets/sounds/bgmusic.mp3", "assets/sounds/bgmusic.ogg"]);
-		game.load.audio("explosion", ["assets/sounds/explosion.mp3", "assets/sounds/explosion.ogg"]);
+        game.load.spritesheet("scoreboard", "Assets/score.png", 128, 128);
+        game.load.spritesheet("door", "Assets/door.png", 98, 127);
+        game.load.image('Wall', "Assets/Wall.png");
+        game.load.spritesheet("instructions", "Assets/instructions.png", 767, 767);
+        game.load.spritesheet("FacialExpression", "Assets/facialexpressions.png", 640, 640);
     }
     create() {
 
