@@ -7,7 +7,6 @@ let HotTeaLimit = 200;
 let sunSpeed = 100;
 let sunLimit = 700;
 var speed = 5;
-var step = 10;
 var cursors;
 var score = 0;
 var myHealthBar;
@@ -19,7 +18,8 @@ var Kiwi;
 let sun;
 let Water;
 let scorebar;
-let pause;
+let pausebutton;
+let faces;
 
 class GameStart {
     
@@ -30,8 +30,8 @@ class GameStart {
         game.load.image("Desert", "Assets/desert.png");
         game.load.image("Sun", "Assets/sun.png");
         game.load.image("Water", "Assets/water.png");
-        game.load.spritesheet("pause", "Assets/face.png", 148, 148);
         game.load.image("paused", "Assets/paused.jpg");
+        game.load.image("pausebutton", "Assets/pausebar.png");
     }
     
     create() {
@@ -97,14 +97,18 @@ class GameStart {
 
         /* game.time.events.add(Phaser.Timer.SECOND*10, this.forest, this); */
 
-        scorebar = game.add.text(5, 500, "Score: \n" + score, {fontStyle: "bold", fill: "#FFFFFF", font: '20pt Arial'});
+        scorebar = game.add.text(20, 500, "Score: \n" + score, {fontStyle: "bold", fill: "#FFFFFF", font: '20pt Arial'});
     
-        pause = game.add.sprite(0, 50, 'pause');
-        pause.animations.add('face', [0,1,2,3]);
-        pause.animations.play('face', 5, true);
-        pause.inputEnabled = true;
-        pause.events.onInputUp.add(this.stop, this);
+        pausebutton = game.add.sprite(80, 100, 'pausebutton');
+        pausebutton.inputEnabled = true;
+        pausebutton.events.onInputUp.add(this.stop, this);
+        pausebutton.scale.setTo(0.5);
+        pausebutton.anchor.setTo(0.5);
         
+        faces = game.add.sprite(10,330,"FacialExpression");
+        faces.anchor.setTo(0);
+        faces.scale.setTo(0.2);
+        faces.frame = 2;
         
 
     }
@@ -165,6 +169,7 @@ class GameStart {
             Kiwi.kill();
             score += 1000;
             scorebar.text = "Score: \n" + score;
+            faces.frame = 1;
         });
 
         game.physics.arcade.overlap(Peter, Water, function() {
@@ -175,8 +180,8 @@ class GameStart {
             health = Math.floor(barConfig.width / 1.5);
             healthNum.text = "Health: " + health;
             scorebar.text = "Score: \n" + score;
+            faces.frame = 1;
         });
-
 
         if(Kiwi.y > 960) {
             Kiwi.kill();
@@ -209,6 +214,7 @@ class GameStart {
                 health = Math.floor(barConfig.width / 1.5);
                 healthNum.text = "Health: " + health;
                 scorebar.text = "Score: \n" + score;
+                faces.frame = 1;
                 if(barConfig.width > 150) {
                     console.log(score);
                 }
@@ -223,6 +229,7 @@ class GameStart {
                 health = Math.floor(barConfig.width / 1.5);
                 healthNum.text = "Health: " + health;
                 scorebar.text = "Score: \n" + score;
+                faces.frame = 4;
                 if(barConfig.width <= 0) {
                     console.log("3");
                 }
@@ -237,6 +244,7 @@ class GameStart {
                 health = Math.floor(barConfig.width / 1.5);
                 healthNum.text = "Health: " + health;
                 scorebar.text = "Score: \n" + score;
+                faces.frame = 4;
                 if(barConfig.width <= 0) {
                     console.log("3");
                 }
@@ -248,21 +256,26 @@ class GameStart {
                 icecreamSpeed = 600 + Math.random() * 100;
                 HotTeaSpeed = 150 + Math.random() * 100;
                 HotTeaLimit = 200;
+                faces.frame = 0;
     
-            } else if (health < 30) {
+            } 
+            else if (health < 30 && health > 0) {
                 icecreamLimit = 300;
                 icecreamSpeed = 300 + Math.random() * 100;
                 HotTeaSpeed = 600 + Math.random() * 100;
                 HotTeaLimit = 100;
-    
+                faces.frame = 3;
             } 
-    
-             else {
+            else if (health > 30 && health < 75) {
                 icecreamLimit = 100;
                 icecreamSpeed = 350 + Math.random() * 100;
                 HotTeaSpeed = 350 + Math.random() * 100;
                 HotTeaLimit = 100;
-            }    
+                
+            } 
+            else if (health <= 0) {
+                faces.frame = 5;
+            }
         
         
         if(score > 7000) {
@@ -295,6 +308,7 @@ class GameStart {
         }
         
         if(score > 15000) {
+            speed = 10;
             this.BK.loadTexture("Desert");
             icecreamSpeed = 0;
             HotTeaSpeed = 0;
@@ -304,10 +318,10 @@ class GameStart {
             sunLimit = 50;
             Water.body.velocity.y = 600;
             if(cursors.up.isDown) {
-                Peter.y -= step;
+                Peter.y -= speed;
             }
             if (cursors.down.isDown) {
-                Peter.y += step;
+                Peter.y += speed;
             }
             if(Peter.y < 80) {
                 Peter.y = 80;
