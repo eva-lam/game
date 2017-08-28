@@ -124,10 +124,12 @@ class GameStart {
     /* forest() {
         this.BK.loadTexture("forest");
         Kiwi.body.velocity.y = 600;
+
         icecreamLimit = 10;
         icecreamSpeed = 1000 + Math.random() * 100;
         HotTeaSpeed = 1000 + Math.random() * 100;
         HotTeaLimit = 10;
+
         if(health > 75) {
             icecreamLimit = 50;
             icecreamSpeed = 800 + Math.random() * 100;

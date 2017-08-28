@@ -11,7 +11,8 @@ window.onload = function() {
 }
 class Boot {
     preload(){
-        game.load.image('Wall', "Assets/Wall.png")
+        game.load.image('Wall', "Assets/Wall.png");
+        game.load.image("loading","Assets/loading.png");
     }
 	create() {
         game.stage.backgroundColor = "#999999";
