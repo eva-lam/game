@@ -32,10 +32,11 @@ class GameStart {
         game.load.image("Water", "Assets/water.png");
         game.load.spritesheet("pause", "Assets/face.png", 148, 148);
         game.load.image("paused", "Assets/paused.jpg");
-        game.load.image("archer","Assets/archer.png");
     }
     
     create() {
+
+          
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -63,21 +64,18 @@ class GameStart {
         Kiwi.scale.setTo(0.2);
         Kiwi.events.onKilled.add(this.kiwiOut,this);
 
-//icecream
         this.icecreamSpeed = icecreamSpeed;
         this.icecreamGroup = game.add.group();
         this.addIcecream(this.icecreamGroup);
 
-//hotTea
         this.HotTeaSpeed = HotTeaSpeed;
         this.HotTeaGroup = game.add.group();
         this.addHotTea(this.HotTeaGroup);
-//sun 
+
         this.sunSpeed = sunSpeed;
         this.sunGroup = game.add.group();
         this.addSun(this.sunGroup);
         
-//waters
         this.waters = game.add.group();
         this.waters.enablebody = true;
         game.physics.enable(this.waters);
@@ -126,12 +124,10 @@ class GameStart {
     /* forest() {
         this.BK.loadTexture("forest");
         Kiwi.body.velocity.y = 600;
-
         icecreamLimit = 10;
         icecreamSpeed = 1000 + Math.random() * 100;
         HotTeaSpeed = 1000 + Math.random() * 100;
         HotTeaLimit = 10;
-
         if(health > 75) {
             icecreamLimit = 50;
             icecreamSpeed = 800 + Math.random() * 100;
