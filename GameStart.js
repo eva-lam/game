@@ -1,3 +1,4 @@
+
 let Peter;
 let icecreams;
 let icecreamSpeed = 350 + Math.random() * 100;
@@ -16,15 +17,25 @@ var barConfig;
 var health;
 var healthNum;
 var Kiwi;
+
 let sun;
 let Water;
 let scorebar;
 let pause;
 
+//weapon variables
+var sprite;
+var weapon;
+var cursors;
+var fireButton;
+
+
+
+
 class GameStart {
     
     preload() {
-        game.load.image("Street", "Assets/Street.png");
+        game.load.image("Beach", "Assets/beach.png");
         game.load.image("forest", "Assets/forest.png");
         game.load.image("Kiwi", "Assets/Kiwi.png");
         game.load.image("Desert", "Assets/desert.png");
@@ -32,16 +43,17 @@ class GameStart {
         game.load.image("Water", "Assets/water.png");
         game.load.spritesheet("pause", "Assets/face.png", 148, 148);
         game.load.image("paused", "Assets/paused.jpg");
+//add arrow image Aug 28 3:05pm 
+        game.load.image("arrow1", "Assets/arrow1.png");
+        
     }
     
     create() {
 
-          
-
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        this.BK = this.game.add.tileSprite(160, 0, 480, 960, 'Street');
-        this.BK = this.game.add.sprite(160, 0,'Street');
+        this.BK = this.game.add.tileSprite(160, 0, 480, 960, 'Beach');
+        this.BK = this.game.add.sprite(160, 0,'Beach');
 
         var wall = game.add.tileSprite(0, 0, 160, game.height, "Wall");
         wall.tint = 0x131715;
@@ -105,7 +117,25 @@ class GameStart {
         pause.inputEnabled = true;
         pause.events.onInputUp.add(this.stop, this);
         
-        
+// weapons 
+       //  Creates the bullets, using the 'arrows' graphic
+        weapon = game.add.weapon(6, 'arrow1');
+    
+        //  The bullet will be automatically killed when it leaves the world bounds
+        weapon.bulletKillType = Phaser.Weapon.KILL_LIFESPAN;
+    
+        //  Bullets live for 2 seconds
+        weapon.bulletLifespan = 2000;
+    
+        //  Because our bullet is drawn facing up, we need to offset its rotation:
+        weapon.bulletAngleOffset = 90;
+    
+        //  The speed at which the bullet is fired
+        weapon.bulletSpeed = 400;
+    
+       
+    
+    
 
     }
     
@@ -161,6 +191,31 @@ class GameStart {
     
     update() {
 
+        sprite = this.add.sprite(Peter.x, Peter.y);
+        game.physics.arcade.enable(sprite);
+        weapon.trackSprite(sprite, 0, 0);  //  Tell the Weapon to track the 'player' Sprite, offset by 14px horizontally, 0 vertically
+        weapon.fireRate = 250;//  One 'set' of bullets, every second
+        weapon.multiFire = true; //  Tell the Weapon plugin it can fire more than once per game loop
+        cursors = this.input.keyboard.createCursorKeys();
+        fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+
+        //fire button for weapons
+        
+        sprite.body.velocity.x = 0;
+        if (cursors.left.isDown)
+        {
+            sprite.body.velocity.x = -200;
+        }
+        else if (cursors.right.isDown)
+        {
+            sprite.body.velocity.x = 200;
+        }
+        if (fireButton.isDown)
+        {
+            weapon.fireOffset(0, 0);
+        }
+        //weapon update ends
+
         game.physics.arcade.overlap(Peter, Kiwi, function() {
             Kiwi.kill();
             score += 1000;
@@ -177,7 +232,8 @@ class GameStart {
             scorebar.text = "Score: \n" + score;
         });
 
-
+        
+        
         if(Kiwi.y > 960) {
             Kiwi.kill();
         }
@@ -409,3 +465,6 @@ class Sun extends Phaser.Sprite {
     }
 
 }
+
+//weapons 
+
