@@ -35,12 +35,17 @@ class GameTitleScreen{
     this.instruction.events.onInputOut.add(this.instructionOut, this);
     this.instructionWidth = this.instruction.width;
     this.instructionHeight = this.instruction.height;
-        
 
     
-    console.log("titlescreen started");
 
     }
+    
+    update() {
+        
+    }
+
+
+    
 
     playOn() {
         this.playButton.animations.play("open", 5, true);

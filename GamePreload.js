@@ -16,6 +16,8 @@ class GamePreload {
         game.load.image('Wall', "Assets/Wall.png");
         game.load.spritesheet("instructions", "Assets/instructions.png", 767, 767);
         game.load.spritesheet("FacialExpression", "Assets/facialexpressions.png", 640, 640);
+        game.load.spritesheet("Lolo", "Assets/LoLo.png", 96, 94);
+        
     }
     create() {
 
