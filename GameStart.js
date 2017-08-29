@@ -42,9 +42,7 @@ class GameStart {
         game.load.image("Sun", "Assets/sun.png");
         game.load.image("Water", "Assets/water.png");
         game.load.image("paused", "Assets/paused.jpg");
-//add arrow image Aug 28 3:05pm 
         game.load.image("arrow1", "Assets/arrow1.png");
-        
         game.load.image("pausebutton", "Assets/pausebar.png");
     }
     
@@ -121,7 +119,7 @@ class GameStart {
 // weapons 
        //  Creates the bullets, using the 'arrows' graphic
         weapon = game.add.weapon(6, 'arrow1');
-    
+       
         //  The bullet will be automatically killed when it leaves the world bounds
         weapon.bulletKillType = Phaser.Weapon.KILL_LIFESPAN;
     
@@ -132,12 +130,12 @@ class GameStart {
         weapon.bulletAngleOffset = 90;
     
         //  The speed at which the bullet is fired
-        weapon.bulletSpeed = 400;
+        weapon.bulletSpeed = 800;
     
-       
+
         faces = game.add.sprite(10,330,"FacialExpression");
         faces.anchor.setTo(0);
-        faces.scale.setTo(0.2);
+        faces.scale.setTo(0.1);
         faces.frame = 2;
         
 
@@ -196,31 +194,6 @@ class GameStart {
     
     update() {
 
-        sprite = this.add.sprite(Peter.x, Peter.y);
-        game.physics.arcade.enable(sprite);
-        weapon.trackSprite(sprite, 0, 0);  //  Tell the Weapon to track the 'player' Sprite, offset by 14px horizontally, 0 vertically
-        weapon.fireRate = 250;//  One 'set' of bullets, every second
-        weapon.multiFire = true; //  Tell the Weapon plugin it can fire more than once per game loop
-        cursors = this.input.keyboard.createCursorKeys();
-        fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-
-        //fire button for weapons
-        
-        sprite.body.velocity.x = 0;
-        if (cursors.left.isDown)
-        {
-            sprite.body.velocity.x = -200;
-        }
-        else if (cursors.right.isDown)
-        {
-            sprite.body.velocity.x = 200;
-        }
-        if (fireButton.isDown)
-        {
-            weapon.fireOffset(0, 0);
-        }
-        //weapon update ends
-
         game.physics.arcade.overlap(Peter, Kiwi, function() {
             Kiwi.kill();
             score += 1000;
@@ -239,7 +212,6 @@ class GameStart {
             faces.frame = 1;
         });
 
-        
         
         if(Kiwi.y > 960) {
             Kiwi.kill();
@@ -307,7 +279,13 @@ class GameStart {
                     console.log("3");
                 }
             });
+            weapon.forEach(function(weapon) {
+                game.physics.arcade.overlap(weapon, sun ,function() {
+                    weapon.kill();
+                    sun.damage(1); 
+                })
         });
+    });
  
             if(health > 75) {
                 icecreamLimit = 80;
@@ -366,6 +344,42 @@ class GameStart {
         }
         
         if(score > 15000) {
+
+            sprite = this.add.sprite(Peter.x, Peter.y);
+            game.physics.arcade.enable(sprite);
+            weapon.trackSprite(sprite, 0, 0);  //  Tell the Weapon to track the 'player' Sprite, offset by 14px horizontally, 0 vertically
+            weapon.fireRate = 250;//  One 'set' of bullets, every second
+            weapon.multiFire = true; //  Tell the Weapon plugin it can fire more than once per game loop
+            cursors = this.input.keyboard.createCursorKeys();
+            fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    
+        //fire button and collision  for weapons
+        
+        // object1, object2, collideCallback, processCallback, callbackContext
+        
+        
+
+        game.physics.arcade.overlap(weapon, sun, null, this);
+
+            if (cursors.left.isDown)
+                {
+                    sprite.body.velocity.x = -200;
+                }
+                else if (cursors.right.isDown)
+                {
+                    sprite.body.velocity.x = 200;
+                }
+                if (fireButton.isDown)
+                {
+                    weapon.fireOffset(0, 0);
+                }
+    
+            
+           
+                //weapon update ends
+            
+            sprite.body.velocity.x = 0;
+
             speed = 10;
             this.BK.loadTexture("Desert");
             icecreamSpeed = 0;
@@ -373,7 +387,7 @@ class GameStart {
             Kiwi.body.velocity.y = 0;
             Kiwi.y = -100;
             sunSpeed = 600;
-            sunLimit = 50;
+            sunLimit = 10;
             Water.body.velocity.y = 600;
             if(cursors.up.isDown) {
                 Peter.y -= speed;
@@ -389,9 +403,7 @@ class GameStart {
             }
         }
     }
-
-
-    addIcecream(group){
+    addIcecream(group) {
         let icecreams = new Icecream(game, icecreamSpeed, this);
         game.add.existing(icecreams);
         group.add(icecreams);
@@ -405,6 +417,7 @@ class GameStart {
     addSun(group) {
         let sun = new Sun(game, sunSpeed, this);
         game.add.existing(sun);
+        sun.health = 2;
         group.add(sun);
     }
 
