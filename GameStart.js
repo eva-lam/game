@@ -354,7 +354,7 @@ class GameStart {
     
         }
         
-        if(score > 15000 && score < 20000) {
+        if(score > 15000 && score < 30000) {
             
             this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
             game.physics.arcade.enable(this.sprite);
@@ -383,11 +383,11 @@ class GameStart {
             this.Kiwi.body.velocity.y = 0;
             this.Kiwi.y = -100;
             sunSpeed = 550;
-            sunLimit = 80;
+            sunLimit = 100;
             this.Water.body.velocity.y = 500;
         }
 
-        if (score > 20000) {
+        if (score > 30000) {
 
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
