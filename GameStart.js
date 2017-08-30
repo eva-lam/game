@@ -10,6 +10,7 @@ let score = 0;
 var speed = 5;
 var cursors;
 let health;
+let Peter
 
 class GameStart {
     
@@ -29,13 +30,14 @@ class GameStart {
         var wall = game.add.tileSprite(0, 0, 160, game.height, "Wall");
         wall.tint = 0x131715;
 
-        this.Peter = game.add.sprite(220, 880, "Peter");
-        this.Peter.anchor.setTo(0.5);
-        this.Peter.scale.setTo(0.2);
-        this.Peter.animations.add('walk', [0,1,2,3]);
-        this.Peter.animations.play('walk', 10, true);
-        game.physics.enable(this.Peter);
-        this.Peter.body.collideWorldBounds = true;
+        Peter = game.add.sprite(220, 880, "Peter");
+        Peter.anchor.setTo(0.5);
+        Peter.scale.setTo(0.2);
+        Peter.animations.add('walk', [0,1,2,3]);
+        Peter.animations.play('walk', 10, true);
+        game.physics.enable(Peter);
+        Peter.body.collideWorldBounds = true;
+        Peter.body.velocity.x = 0;
 
         this.kiwis = game.add.group();
         this.kiwis.enablebody = true;
@@ -90,9 +92,7 @@ class GameStart {
         this.pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.P);
         this.pauseKey.onDown.add(this.pausing, this);
         
-        
-
-// weapons 
+    // weapons 
        //  Creates the bullets, using the 'arrows' graphic
         this.weapon = game.add.weapon(6, 'arrow1');
     
@@ -127,8 +127,18 @@ class GameStart {
         this.fireSpeed = fireSpeed;
         this.fireGroup = game.add.group();    
         this.addFire(this.fireGroup);
-        
 
+        window.addEventListener("deviceorientation", this.peterMove, true);
+    
+    }
+
+
+    peterMove(e) {
+        var x = e.gamma;
+        Peter.body.velocity.x += x;
+        if(Peter.x < 50) {
+            Peter.x = 50;
+        }
     }
     
     pausing() {
@@ -152,10 +162,10 @@ class GameStart {
     }
     
     
+    
     update() {
 
         let width = this.barConfig.width;
-        var Peter = this.Peter;
         var faces = this.faces;
         var Kiwi = this.Kiwi;
         var myHealthBar = this.myHealthBar;
@@ -167,7 +177,16 @@ class GameStart {
         var Lolo = this.Lolo;
         var sungroup = this.sunGroup;
         var firegroup = this.fireGroup;
-    
+        
+        this.sprite = this.add.sprite(Peter.x, Peter.y);
+        game.physics.arcade.enable(this.sprite);
+        weapon.trackSprite(this.sprite, 0, 0); 
+        weapon.fireRate = 100;
+        weapon.multiFire = true;
+        cursors = this.input.keyboard.createCursorKeys();
+        this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+        this.sprite.body.velocity.x = 0;
+
         if(this.Lolo.x > 580) {
             this.Lolo.body.velocity.x = -100;
         } else if (this.Lolo.x < 200) {
@@ -202,16 +221,16 @@ class GameStart {
         }
        
         if(cursors.right.isDown) {
-            this.Peter.x += speed;
+            Peter.x += speed;
         }
         if (cursors.left.isDown) {
-            this.Peter.x -= speed;
+            Peter.x -= speed;
         }
-        if(this.Peter.x < 200) {
-            this.Peter.x = 200;
+        if(Peter.x < 200) {
+            Peter.x = 200;
         }
-        if(this.Peter.x > 620) {
-            this.Peter.x = 620;
+        if(Peter.x > 620) {
+            Peter.x = 620;
         }
 
         if(health > 75) {
@@ -356,15 +375,6 @@ class GameStart {
         
         if(score > 15000 && score < 30000) {
             
-            this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
-            game.physics.arcade.enable(this.sprite);
-            weapon.trackSprite(this.sprite, 0, 0); 
-            weapon.fireRate = 100;
-            weapon.multiFire = true;
-            cursors = this.input.keyboard.createCursorKeys();
-            this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    
-            this.sprite.body.velocity.x = 0;
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -375,6 +385,10 @@ class GameStart {
             if (this.fireButton.isDown) {
                 weapon.fireOffset(0, 0);
             }
+            this.game.input.onTap.add(function(game) {
+                weapon.fireOffset(0, 0);
+                weapon.fireRate = 50;
+            });
 
             speed = 10;
             this.BK.loadTexture("Desert");
@@ -395,16 +409,6 @@ class GameStart {
             this.fire.visible = true;
             sunSpeed = 0;
             this.sunGroup.destroy();
-
-            this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
-            game.physics.arcade.enable(this.sprite);
-            weapon.trackSprite(this.sprite, 0, 0); 
-            weapon.fireRate = 100;
-            weapon.multiFire = true;
-            cursors = this.input.keyboard.createCursorKeys();
-            this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    
-            this.sprite.body.velocity.x = 0;
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -415,9 +419,15 @@ class GameStart {
             if (this.fireButton.isDown) {
                 weapon.fireOffset(0, 0);
             }
+            this.game.input.onTap.add(function(game) {
+                weapon.fireOffset(0, 0);
+                weapon.fireRate = 50;
+            });
+            
             
         }
     }
+
     addIcecream(group) {
         let icecreams = new Icecream(game, icecreamSpeed, this);
         game.add.existing(icecreams);
