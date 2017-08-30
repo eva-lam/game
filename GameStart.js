@@ -5,7 +5,7 @@ let HotTeaLimit = 200;
 let sunSpeed = 100;
 let sunLimit = 700;
 let fireSpeed = 400;
-let fireLimit = 280 + Math.random()*1000;
+let fireLimit = 150 + Math.random()*1000;
 let score = 0;
 var speed = 5;
 var cursors;
@@ -122,7 +122,7 @@ class GameStart {
         game.physics.enable(this.Lolo);
         this.Lolo.body.velocity.x = 100;
         this.Lolo.visible = false;
-        this.Lolo.health = 20;
+        this.Lolo.health = 30;
 
         this.fireSpeed = fireSpeed;
         this.fireGroup = game.add.group();    
@@ -135,7 +135,7 @@ class GameStart {
 
     peterMove(e) {
         var x = e.gamma;
-        Peter.body.velocity.x += x;
+        Peter.body.velocity.x += x * 0.5;
         if(Peter.x < 50) {
             Peter.x = 50;
         }
@@ -193,17 +193,16 @@ class GameStart {
             this.Lolo.body.velocity.x = 100;
         }
         
-        game.physics.arcade.overlap(this.Peter, Kiwi, function() {
+        game.physics.arcade.overlap(Peter, Kiwi, function() {
             Kiwi.kill();
-           
-            score += 1000;
+            score += 750;
             scorebar.text = "Score: \n" + score;
             faces.frame = 1;
         });
 
-        game.physics.arcade.overlap(this.Peter, Water, function() {
+        game.physics.arcade.overlap(Peter, Water, function() {
             Water.kill();
-            this.score += 3000;
+            this.score += 500;
             myHealthBar.setWidth(width + 40);
             barConfig.width += 40;
             health = Math.floor(barConfig.width / 1.5);
@@ -309,8 +308,8 @@ class GameStart {
                 game.physics.arcade.overlap(weapons, sun, function() {
                     sun.damage(1);
                     weapons.kill();
-                    if(sun.health === 0) {
-                        score += 4000;
+                    if(sun.health <= 0) {
+                        score += 1000;
                         myHealthBar.setWidth(width + 5);
                         barConfig.width += 5;
                         health = Math.floor(barConfig.width / 1.5);
@@ -373,7 +372,7 @@ class GameStart {
     
         }
         
-        if(score > 15000 && score < 30000) {
+        if(score > 15000 && score < 40000) {
             
             
             if (cursors.left.isDown) {
@@ -401,7 +400,7 @@ class GameStart {
             this.Water.body.velocity.y = 500;
         }
 
-        if (score > 30000) {
+        if (score > 40000) {
 
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
@@ -421,7 +420,7 @@ class GameStart {
             }
             this.game.input.onTap.add(function(game) {
                 weapon.fireOffset(0, 0);
-                weapon.fireRate = 50;
+                weapon.fireRate = 10;
             });
             
             
