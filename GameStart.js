@@ -14,34 +14,12 @@ let health;
 class GameStart {
     
     preload() {
-        game.load.audio("level1music","Assets/sounds/level1.mp3");
-        game.load.audio("level2","Assets/sounds/level2.mp3");
-        game.load.audio("level3","Assets/sounds/level3.mp3");
-        game.load.audio("Sip","Assets/sounds/sip.wav");
-        game.load.audio("Slurp","Assets/sounds/slurp.wav");
-        game.load.audio("lick","Assets/sounds/lick.wav");
-        game.load.audio("kiwi","Assets/sounds/kiwi.wav");
-        game.load.audio("ouch","Assets/sounds/ouch.wav");
-        game.load.audio("hurt","Assets/sounds/hurt.wav");
-        game.load.audio("shooting","Assets/sounds/shooting.wav");
-        game.load.audio("destroy","Assets/sounds/destroy.wav");
-        game.load.image("Beach", "Assets/beach.png");
-        game.load.image("forest", "Assets/forest.png");
-        game.load.image("Kiwi", "Assets/Kiwi.png");
-        game.load.image("Desert", "Assets/desert.png");
-        game.load.image("Sun", "Assets/sun.png");
-        game.load.image("Water", "Assets/water.png");
-        game.load.image("paused", "Assets/paused.jpg");
-        game.load.image("arrow1", "Assets/arrow1.png");
-        game.load.image("SpaceBK", "Assets/starfield.jpg");
-        game.load.image("pausebutton", "Assets/pausebar.png");
-        game.load.image("Fire", "Assets/sunPower.png");
+        
     }
     
     create() {
 
-        this.level1music = game.add.audio("level1music");
-        this.level1music.play('',0,0.5);
+        
         
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -198,8 +176,7 @@ class GameStart {
         
         game.physics.arcade.overlap(this.Peter, Kiwi, function() {
             Kiwi.kill();
-            var snd = game.add.audio("kiwi");
-            snd.play();
+           
             score += 1000;
             scorebar.text = "Score: \n" + score;
             faces.frame = 1;
@@ -207,8 +184,6 @@ class GameStart {
 
         game.physics.arcade.overlap(this.Peter, Water, function() {
             Water.kill();
-            var slurp = game.add.audio("slurp");
-            slurp.play();
             this.score += 3000;
             myHealthBar.setWidth(width + 40);
             barConfig.width += 40;
@@ -264,12 +239,11 @@ class GameStart {
         else if (health <= 0) {
             this.faces.frame = 5;
         }
+        
 
         this.icecreamGroup.forEach(function(icecream) {
             game.physics.arcade.overlap(Peter, icecream, function() {
                 icecream.destroy();
-                var lick = game.add.audio("lick");
-                lick.play();
                 score += 500;
                 myHealthBar.setWidth(width + 10);
                 barConfig.width += 10;
@@ -286,8 +260,6 @@ class GameStart {
         this.HotTeaGroup.forEach(function(tea) {
             game.physics.arcade.overlap(Peter, tea, function() {
                 tea.destroy();
-                var ouch = game.add.audio("ouch");
-                ouch.play('',0,0.5);
                 score -= 300;
                 myHealthBar.setWidth(width - 15);
                 barConfig.width -= 15;
@@ -304,8 +276,6 @@ class GameStart {
         this.sunGroup.forEach(function(sun) {
             game.physics.arcade.overlap(Peter, sun, function() {
                 sun.destroy();
-                var hurt = game.add.audio("hurt");
-                hurt.play('',0,0.5);
                 myHealthBar.setWidth(width - 20);
                 barConfig.width -= 20;
                 health = Math.floor(barConfig.width / 1.5);
@@ -320,8 +290,6 @@ class GameStart {
                 game.physics.arcade.overlap(weapons, sun, function() {
                     sun.damage(1);
                     weapons.kill();
-                    var destroy = game.add.audio("destroy");
-                    destroy.play('',0,0.5);
                     if(sun.health === 0) {
                         score += 4000;
                         myHealthBar.setWidth(width + 5);
@@ -334,6 +302,7 @@ class GameStart {
             });
         });
         
+
         this.fireGroup.forEach(function(fire) {
             game.physics.arcade.overlap(fire, Peter, function() {
                 fire.kill();
@@ -373,44 +342,59 @@ class GameStart {
 
         
         
-        if(score > 7000) {
+        if(score > 7000 && score < 15000) {
             
             this.BK.loadTexture("forest");
             
             this.Kiwi.body.velocity.y = 600;
-            this.level1music.paused;
-            this.level2music = game.add.audio("level2music");
-            this.level2music.play('',0,0.5);
-
-    
             icecreamLimit = 100;
             icecreamSpeed = 500 + Math.random() * 100;
             HotTeaSpeed = 500 + Math.random() * 100;
             HotTeaLimit = 100;
     
-            if(health > 75) {
-                icecreamLimit = 200;
-                icecreamSpeed = 600 + Math.random() * 100;
-                HotTeaSpeed = 400 + Math.random() * 100;
-                HotTeaLimit = 200;
-            } else if (health < 30) {
-                icecreamLimit = 200;
-                icecreamSpeed = 400 + Math.random() * 100;
-                HotTeaSpeed = 600 + Math.random() * 100;
-                HotTeaLimit = 200;
-            } 
-             else {
-                icecreamLimit = 100;
-                icecreamSpeed = 600 + Math.random() * 100;
-                HotTeaSpeed = 600 + Math.random() * 100;
-                HotTeaLimit = 100;
-            }
         }
         
-        if(score > 15000) {
+        if(score > 15000 && score < 20000) {
             
-            this.level3music = game.add.audio("level3music");
-            this.level3music.loopFull(1);
+            this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
+            game.physics.arcade.enable(this.sprite);
+            weapon.trackSprite(this.sprite, 0, 0); 
+            weapon.fireRate = 100;
+            weapon.multiFire = true;
+            cursors = this.input.keyboard.createCursorKeys();
+            this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    
+            this.sprite.body.velocity.x = 0;
+            
+            if (cursors.left.isDown) {
+                this.sprite.body.velocity.x = -200;
+            }
+            else if (cursors.right.isDown) {
+                this.sprite.body.velocity.x = 200;
+            }
+            if (this.fireButton.isDown) {
+                weapon.fireOffset(0, 0);
+            }
+
+            speed = 10;
+            this.BK.loadTexture("Desert");
+            icecreamSpeed = 0;
+            HotTeaSpeed = 0;
+            this.Kiwi.body.velocity.y = 0;
+            this.Kiwi.y = -100;
+            sunSpeed = 550;
+            sunLimit = 80;
+            this.Water.body.velocity.y = 500;
+        }
+
+        if (score > 20000) {
+
+            this.space = this.BK.loadTexture("SpaceBK");
+            this.BK.tilePosition.y += 2;
+            this.Lolo.visible = true;
+            this.fire.visible = true;
+            sunSpeed = 0;
+            this.sunGroup.destroy();
 
             this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
             game.physics.arcade.enable(this.sprite);
@@ -430,43 +414,8 @@ class GameStart {
             }
             if (this.fireButton.isDown) {
                 weapon.fireOffset(0, 0);
-                var shooting = game.add.audio("shooting");
-                shooting.play();
-                
-             }
-
-            speed = 10;
-            this.BK.loadTexture("Desert");
-            icecreamSpeed = 0;
-            HotTeaSpeed = 0;
-            this.Kiwi.body.velocity.y = 0;
-            this.Kiwi.y = -100;
-            sunSpeed = 550;
-            sunLimit = 80;
-            Water.body.velocity.y = 600;
-
-            if(cursors.up.isDown) {
-                this.Peter.y -= speed;
             }
-            if (cursors.down.isDown) {
-                this.Peter.y += speed;
-            }
-            if(this.Peter.y < 80) {
-                this.Peter.y = 80;
-            }
-            if(this.Peter.y > 880) {
-                this.Peter.y = 880;
-            }
-        }
-
-        if (score > 20000) {
-            this.space = this.BK.loadTexture("SpaceBK");
-            this.BK.tilePosition.y += 2;
-            this.Lolo.visible = true;
-            sunLimit = 200;
-            sunSpeed = 400;
-            this.fire.visible = true;
-            sungroup.destroy();
+            
         }
     }
     addIcecream(group) {

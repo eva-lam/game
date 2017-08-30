@@ -7,6 +7,7 @@ window.onload = function() {
     game.state.add("GameTitleScreen", GameTitleScreen);
     game.state.add("GameStart", GameStart);
     game.state.add("GamePreload", GamePreload);
+    game.state.add("GameInstruction", GameInstruction);
 	game.state.start("Boot");
 }
 class Boot {

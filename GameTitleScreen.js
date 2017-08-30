@@ -26,7 +26,7 @@ class GameTitleScreen{
     this.scoreboard.events.onInputOver.add(this.scoreboardOn, this);
     this.scoreboard.events.onInputOut.add(this.scoreboardOut, this);
 
-    this.instruction = game.add.button((game.width / 2) + game.width/2/2 + 30, game.height - 150, "instructions");
+    this.instruction = game.add.button((game.width / 2) + game.width/2/2 + 30, game.height - 150, "instructions", this.gameInstruction);
     this.instruction.anchor.setTo(0.5);
     this.instruction.scale.setTo(0.15);
     this.instruction.inputEnabled = true;
@@ -98,6 +98,8 @@ class GameTitleScreen{
     startGame(){
         console.log("playButton pressed");
         game.state.start("GameStart");
-
+    }
+    gameInstruction() {
+        game.state.start("GameInstruction");
     }
 }
