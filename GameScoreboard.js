@@ -35,6 +35,9 @@ class GameScoreboard {
     }
 
     create(){
+
+        
+	
 		
 		var background = game.add.image(0,0,"background");
 
@@ -76,33 +79,94 @@ class GameScoreboard {
 			
 		}
 	
-		playOn(){
-			this.playButton.animations.play("open", 5, true);
-			this.tween1 = game.add.tween(this.playButton).to({
-				width: 150,
-				height: 150,
-			}, 1900, "Bounce", true, 0, -1);
-			this.tween1.yoyo(true);
-		}
-	
-		playOut(){
-			this.playButton.animations.stop();
-			this.playButton.frame = 0;
-			this.playButton.width = 98;
-			this.playButton.height = 127;
-			this.tween1.stop();
-		}
-	
-		startGame(){
-			console.log("playButton pressed");
-			game.state.start("GameStart");
-	
-		}
-
-		homePage (){
-			console.log("go to titlescreen!");
-			game.state.start("GameTitleScreen");
-		
+    playOn() {
+        this.playButton.animations.play("open", 5, true);
+        this.tween1 = game.add.tween(this.playButton).to({
+            width: 150,
+            height: 150,
+        }, 1900, "Bounce", true, 0, -1);
+        this.tween1.yoyo(true);
     }
+	
+    playOut() {
+        this.playButton.animations.stop();
+        this.playButton.frame = 0;
+        this.playButton.width = 98;
+        this.playButton.height = 127;
+        this.tween1.stop();      
+    }
+	
+    startGame(){
+        console.log("playButton pressed");
+        game.state.start("GameStart");
+    }
+
+    homePage (){
+        console.log("go to titlescreen!");
+        game.state.start("GameTitleScreen");	
+    }
+
+    instructionOn() {
+        this.instruction.animations.play("change", 5, true);
+        this.tween3 = game.add.tween(this.instruction).to({
+            width: 150,
+            height: 150,
+        }, 1900, "Bounce", true, 0, -1);
+        this.tween3.yoyo(true);
+    }
+
+    instructionOut() {
+        this.instruction.animations.stop();
+        this.instruction.frame = 0;
+        this.instruction.width = this.instructionWidth;
+        this.instruction.height = this.instructionHeight;
+        this.tween3.stop();
+    }
+    gameInstruction() {
+        game.state.start("GameInstruction");
+    }
+
 }
+
+/*
+var data = [];
+
+class GameScoreboard {
+    preload() {
+        
+        game.load.json('Score', './scoreboard.json');
+        this.data = [];
+        $(function() {
+            $.ajax({
+                url: "./scoreboard.json"
+            }).done(function(data) {
+                $.each(data, function(item) {
+                    console.log(data[item].score);
+                    data.push(data[item].score);
+                });
+            });
+        }); 
+        this.game.load.text("Score", "./scoreboard.json");
+
+       
+    }
+    create() {
+
+            this.rank = JSON.parse(this.game.cache.getText("Score"));
+        
+            this.rank.forEach(function(item) {
+                data.push([item.name, item.score] );
+            }, this);
+
+            data.sort((a, b) => {return b - a;});
+
+        
+        var score1 = game.add.text(0,100, data[0][0] + "   " + data[0][1]);
+        var score2 = game.add.text(0,200, data[1][0] + "   " + data[1][1]);
+        var score3 = game.add.text(0,300, data[2][0] + "   " + data[2][1]);
+        var score4 = game.add.text(0,400, data[3][0] + "   " + data[3][1]);
+        var score5 = game.add.text(0,500, data[4][0] + "   " + data[4][1]);
+
+    }
+}*/
 

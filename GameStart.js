@@ -10,17 +10,21 @@ let fireLimit = 150 + Math.random()*1000;
 var speed = 5;
 var cursors;
 let health;
-let Peter
+let Peter;
+let playerName;
+let Kiwi;
+
+
+
 
 class GameStart {
     
     preload() {
-
-        
-
+        playerName = prompt("What is your name?");
     }
     
     create() {
+        console.log(playerName);
         var background = game.add.image(0,0,"background");
         this.level1music = game.add.audio("level1music");
         this.level1music.play('',0,0.5);
@@ -46,11 +50,11 @@ class GameStart {
         this.kiwis.enablebody = true;
         game.physics.enable(this.kiwis);
 
-        this.Kiwi = this.kiwis.create(game.rnd.between(180, 600), -Math.floor(Math.random()+1000), "Kiwi");
-        game.physics.enable(this.Kiwi);
-        this.Kiwi.anchor.setTo(0.5);
-        this.Kiwi.scale.setTo(0.2);
-        this.Kiwi.events.onKilled.add(this.kiwiOut,this);
+        Kiwi = this.kiwis.create(game.rnd.between(180, 600), -Math.floor(Math.random()+1000), "Kiwi");
+        game.physics.enable(Kiwi);
+        Kiwi.anchor.setTo(0.5);
+        Kiwi.scale.setTo(0.2);
+        Kiwi.events.onKilled.add(this.kiwiOut,this);
 
         this.icecreamSpeed = icecreamSpeed;
         this.icecreamGroup = game.add.group();
@@ -134,14 +138,16 @@ class GameStart {
         this.fireGroup = game.add.group();    
         this.addFire(this.fireGroup);
 
-        window.addEventListener("deviceorientation", this.peterMove, true);
-    
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener("deviceorientation", this.peterMove, true);
+        }
+
     }
 
 
     peterMove(e) {
         var x = e.gamma;
-        Peter.body.velocity.x += x * 0.5;
+        Peter.body.velocity.x += x * 20;
         if(Peter.x < 50) {
             Peter.x = 50;
         }
@@ -159,8 +165,8 @@ class GameStart {
     };
 
     kiwiOut() {
-        this.Kiwi.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+1000));
-        this.Kiwi.body.velocity.y = 600;
+        Kiwi.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+1000));
+        Kiwi.body.velocity.y = 600;
     }
 
     waterOut() {
@@ -173,7 +179,6 @@ update() {
 
         let width = this.barConfig.width;
         var faces = this.faces;
-        var Kiwi = this.Kiwi;
         var myHealthBar = this.myHealthBar;
         var healthNum = this.healthNum;
         var Water = this.Water;
@@ -219,7 +224,7 @@ update() {
             faces.frame = 1;
         });
 
-        if(this.Kiwi.y > 960) {
+        if(Kiwi.y > 960) {
             this.Kiwi.kill();
         }
 
@@ -375,7 +380,7 @@ update() {
             
             this.BK.loadTexture("forest");
             
-            this.Kiwi.body.velocity.y = 600;
+            Kiwi.body.velocity.y = 600;
             icecreamLimit = 100;
             icecreamSpeed = 500 + Math.random() * 100;
             HotTeaSpeed = 500 + Math.random() * 100;
@@ -384,7 +389,8 @@ update() {
         }
         
         if(score > 15000 && score < 40000) {
-            
+            Kiwi.body.velocity.y = 0;
+            Kiwi.y = -100;
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -404,8 +410,7 @@ update() {
             this.BK.loadTexture("Desert");
             icecreamSpeed = 0;
             HotTeaSpeed = 0;
-            this.Kiwi.body.velocity.y = 0;
-            this.Kiwi.y = -100;
+            
             sunSpeed = 550;
             sunLimit = 100;
             this.Water.body.velocity.y = 500;
@@ -416,8 +421,8 @@ update() {
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
             this.Lolo.visible = true;
-            var snd = game.add.audio("bossstage");
-            snd.play();
+            var snd1 = game.add.audio("bossstage");
+            snd1.play();
             this.fire.visible = true;
             sunSpeed = 0;
             this.sunGroup.destroy();
@@ -442,20 +447,29 @@ update() {
 //gameover transition 
    
 
-    if (health <=0) {
-            var snd = game.add.audio("gameover");
-            snd.play();
-            game.paused = true;  
-            this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
-            this.gameoversign.anchor.setTo(0.5);
+    if (health <=0 || health >= 100 || this.Lolo.health <= 0) {
 
-            game.paused = false;
-            game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
-                game.state.start("GameOverScreen");
-                
-            })
+        this.sunGroup.destroy();
+        this.icecreamGroup.destroy();
+        this.fireGroup.destroy();
+        this.HotTeaGroup.destroy();
+        this.kiwis.destroy();
+        this.waters.destroy();
+        
+
+        var snd2 = game.add.audio("gameover");
+        snd2.play();
+        
+        this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
+        this.gameoversign.anchor.setTo(0.5);
+
+        game.paused = false;
+        game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
+            game.state.start("GameOverScreen", true, false); 
+        });
+        
     
-        }
+    }
 
         // this.score = 0;
         // console.log(this.score);
@@ -466,15 +480,15 @@ update() {
     //gameover transition ends
 
     addIcecream(group) {
-        let icecreams = new Icecream(game, icecreamSpeed, this);
-        game.add.existing(icecreams);
-        group.add(icecreams);
+        this.icecreams = new Icecream(game, icecreamSpeed, this);
+        game.add.existing(this.icecreams);
+        group.add(this.icecreams);
     }
 
     addHotTea(group) {
-        let hotTea = new HotTea(game, HotTeaSpeed, this);
-        game.add.existing(hotTea);
-        group.add(hotTea);
+        this.hotTea = new HotTea(game, HotTeaSpeed, this);
+        game.add.existing(this.hotTea);
+        group.add(this.hotTea);
     }
     addSun(group) {
         this.sun = new Sun(game, sunSpeed, this);
@@ -551,7 +565,6 @@ class Sun extends Phaser.Sprite {
         this.body.velocity.y = sunSpeed;
         this.placeBarrier = true;
         this.start = GameStart;
-        
     }
 
     update() {

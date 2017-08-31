@@ -18,7 +18,7 @@ class GameOverScreen {
         this.boss.animations.play('walk', 10, true);
         game.physics.enable(this.boss);
 	    
-		text = game.add.text(game.world.width / 2, game.world.height / 2, "Your Score is "+score);
+		text = game.add.text(game.world.width / 2, game.world.height / 2, playerName +  "\nYour Score is "+score);
 		
 				//Center align
 				text.anchor.set(0.5);
@@ -96,7 +96,7 @@ class GameOverScreen {
 	
 		startGame(){
 			console.log("playButton pressed");
-			game.state.start("GameStart");
+			game.state.start("GameStart", true, false);
 	
 		}
 
