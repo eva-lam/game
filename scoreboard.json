@@ -37,5 +37,10 @@
     {
     "name": "Katie",
     "score": "1000"
+    },
+
+    {
+    "name": "Watson",
+    "score": "5678"
     }
 ]

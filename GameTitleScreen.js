@@ -37,8 +37,6 @@ class GameTitleScreen{
     this.instructionWidth = this.instruction.width;
     this.instructionHeight = this.instruction.height;
 
-    
-
     }
     
     update() {
@@ -106,5 +104,6 @@ class GameTitleScreen{
     gameInstruction() {
         game.state.start("GameInstruction");
     }
+
 }
 

@@ -4,14 +4,16 @@ let icecreamLimit = 200;
 let HotTeaLimit = 200;
 let sunSpeed = 100;
 let sunLimit = 700;
+let score = 0;
 let fireSpeed = 400;
 let fireLimit = 150 + Math.random()*1000;
-let score = 0;
 var speed = 5;
 var cursors;
 let health;
 let Peter;
 let playerName;
+let Kiwi;
+
 
 
 
@@ -22,9 +24,11 @@ class GameStart {
     }
     
     create() {
+        console.log(playerName);
+        var background = game.add.image(0,0,"background");
+        this.level1music = game.add.audio("level1music");
+        this.level1music.play('',0,0.5);
 
-        
-        
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.BK = this.game.add.tileSprite(160, 0, 480, 960, 'Beach');
@@ -46,11 +50,11 @@ class GameStart {
         this.kiwis.enablebody = true;
         game.physics.enable(this.kiwis);
 
-        this.Kiwi = this.kiwis.create(game.rnd.between(180, 600), -Math.floor(Math.random()+1000), "Kiwi");
-        game.physics.enable(this.Kiwi);
-        this.Kiwi.anchor.setTo(0.5);
-        this.Kiwi.scale.setTo(0.2);
-        this.Kiwi.events.onKilled.add(this.kiwiOut,this);
+        Kiwi = this.kiwis.create(game.rnd.between(180, 600), -Math.floor(Math.random()+1000), "Kiwi");
+        game.physics.enable(Kiwi);
+        Kiwi.anchor.setTo(0.5);
+        Kiwi.scale.setTo(0.2);
+        Kiwi.events.onKilled.add(this.kiwiOut,this);
 
         this.icecreamSpeed = icecreamSpeed;
         this.icecreamGroup = game.add.group();
@@ -83,10 +87,12 @@ class GameStart {
 
         this.healthNum = game.add.text(5, 790, "Health: " +  health, {fontStyle: "bold", fill: "#FFFFFF", font: '20pt Arial'});
 
-
+        
+        
         score = 0;
+        // console.log(this.score);
         this.scorebar = game.add.text(20, 500, "Score: \n" + score, {fontStyle: "bold", fill: "#FFFFFF", font: '20pt Arial'});
-    
+        console.log(this.score);
         this.pausebutton = game.add.sprite(80, 100, 'pausebutton');
         this.pausebutton.inputEnabled = true;
         this.pausebutton.events.onInputUp.add(this.pausing, this);
@@ -95,7 +101,8 @@ class GameStart {
         this.pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.P);
         this.pauseKey.onDown.add(this.pausing, this);
         
-    // weapons 
+
+// weapons 
        //  Creates the bullets, using the 'arrows' graphic
         this.weapon = game.add.weapon(6, 'arrow1');
     
@@ -131,8 +138,10 @@ class GameStart {
         this.fireGroup = game.add.group();    
         this.addFire(this.fireGroup);
 
-        window.addEventListener("deviceorientation", this.peterMove, true);
-    
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener("deviceorientation", this.peterMove, true);
+        }
+
     }
 
 
@@ -153,24 +162,23 @@ class GameStart {
             game.paused = false;
             this.pausebar.kill();
         }
-    }
+    };
 
     kiwiOut() {
-        this.Kiwi.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+1000));
-        this.Kiwi.body.velocity.y = 600;
+        Kiwi.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+1000));
+        Kiwi.body.velocity.y = 600;
     }
+
     waterOut() {
         this.Water.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+800));
         this.Water.body.velocity.y = 600;
     }
     
-    
-    
-    update() {
+//update 
+update() {
 
         let width = this.barConfig.width;
         var faces = this.faces;
-        var Kiwi = this.Kiwi;
         var myHealthBar = this.myHealthBar;
         var healthNum = this.healthNum;
         var Water = this.Water;
@@ -205,7 +213,9 @@ class GameStart {
 
         game.physics.arcade.overlap(Peter, Water, function() {
             Water.kill();
-            this.score += 500;
+            var slurp = game.add.audio("slurp");
+            slurp.play();
+            score += 500;
             myHealthBar.setWidth(width + 40);
             barConfig.width += 40;
             health = Math.floor(barConfig.width / 1.5);
@@ -214,7 +224,7 @@ class GameStart {
             faces.frame = 1;
         });
 
-        if(this.Kiwi.y > 960) {
+        if(Kiwi.y > 960) {
             this.Kiwi.kill();
         }
 
@@ -282,6 +292,7 @@ class GameStart {
             game.physics.arcade.overlap(Peter, tea, function() {
                 tea.destroy();
                 score -= 300;
+                
                 myHealthBar.setWidth(width - 15);
                 barConfig.width -= 15;
                 health = Math.floor(barConfig.width / 1.5);
@@ -311,8 +322,10 @@ class GameStart {
                 game.physics.arcade.overlap(weapons, sun, function() {
                     sun.damage(1);
                     weapons.kill();
+                    var destroy = game.add.audio("destroy");
+                    destroy.play('',0,0.5);
                     if(sun.health <= 0) {
-                        score += 1000;
+                        score += 900;
                         myHealthBar.setWidth(width + 5);
                         barConfig.width += 5;
                         health = Math.floor(barConfig.width / 1.5);
@@ -367,7 +380,7 @@ class GameStart {
             
             this.BK.loadTexture("forest");
             
-            this.Kiwi.body.velocity.y = 600;
+            Kiwi.body.velocity.y = 600;
             icecreamLimit = 100;
             icecreamSpeed = 500 + Math.random() * 100;
             HotTeaSpeed = 500 + Math.random() * 100;
@@ -376,7 +389,8 @@ class GameStart {
         }
         
         if(score > 15000 && score < 40000) {
-            
+            Kiwi.body.velocity.y = 0;
+            Kiwi.y = -100;
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -396,8 +410,7 @@ class GameStart {
             this.BK.loadTexture("Desert");
             icecreamSpeed = 0;
             HotTeaSpeed = 0;
-            this.Kiwi.body.velocity.y = 0;
-            this.Kiwi.y = -100;
+            
             sunSpeed = 550;
             sunLimit = 100;
             this.Water.body.velocity.y = 500;
@@ -408,6 +421,8 @@ class GameStart {
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
             this.Lolo.visible = true;
+            var snd1 = game.add.audio("bossstage");
+            snd1.play();
             this.fire.visible = true;
             sunSpeed = 0;
             this.sunGroup.destroy();
@@ -421,25 +436,59 @@ class GameStart {
             if (this.fireButton.isDown) {
                 weapon.fireOffset(0, 0);
             }
-            this.game.input.onTap.add(function(game) {
-                weapon.fireOffset(0, 0);
-                weapon.fireRate = 10;
-            });
-            
             
         }
+
+        this.game.input.onTap.add(function(game) {
+            weapon.fireOffset(0, 0);
+            weapon.fireRate = 10;
+        });
+
+//gameover transition 
+   
+
+    if (health <=0 || health >= 100 || this.Lolo.health <= 0) {
+
+        this.sunGroup.destroy();
+        this.icecreamGroup.destroy();
+        this.fireGroup.destroy();
+        this.HotTeaGroup.destroy();
+        this.kiwis.destroy();
+        this.waters.destroy();
+        
+
+        var snd2 = game.add.audio("gameover");
+        snd2.play();
+        
+        this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
+        this.gameoversign.anchor.setTo(0.5);
+
+        game.paused = false;
+        game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
+            game.state.start("GameOverScreen", true, false); 
+        });
+        
+    
     }
 
+        // this.score = 0;
+        // console.log(this.score);
+        // this.scorebar = game.add.text(20, 500, "Score: \n" + this.score, {fontStyle: "bold", fill: "#FFFFFF", font: '20pt Arial'});
+        // console.log(this.score);
+
+    }//update bracket ends
+    //gameover transition ends
+
     addIcecream(group) {
-        let icecreams = new Icecream(game, icecreamSpeed, this);
-        game.add.existing(icecreams);
-        group.add(icecreams);
+        this.icecreams = new Icecream(game, icecreamSpeed, this);
+        game.add.existing(this.icecreams);
+        group.add(this.icecreams);
     }
 
     addHotTea(group) {
-        let hotTea = new HotTea(game, HotTeaSpeed, this);
-        game.add.existing(hotTea);
-        group.add(hotTea);
+        this.hotTea = new HotTea(game, HotTeaSpeed, this);
+        game.add.existing(this.hotTea);
+        group.add(this.hotTea);
     }
     addSun(group) {
         this.sun = new Sun(game, sunSpeed, this);
@@ -454,6 +503,8 @@ class GameStart {
         group.add(this.fire);
         this.fire.visible = false;
     }
+
+    
 }
 
 class Icecream extends Phaser.Sprite{
@@ -514,7 +565,6 @@ class Sun extends Phaser.Sprite {
         this.body.velocity.y = sunSpeed;
         this.placeBarrier = true;
         this.start = GameStart;
-        
     }
 
     update() {
@@ -550,4 +600,6 @@ class Fire extends Phaser.Sprite {
         }
     }
 }
+
+
 
