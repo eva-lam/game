@@ -4,7 +4,7 @@ class GameScoreboard {
     preload () {
         // $(function(){ 
         //     $.ajax ({
-        //         url:"scoreboard.json"
+        //         url:“scoreboard.json”
         //     }) 
         //     .done(function(data){   
         //         $.each(data, function(key,value){
@@ -21,7 +21,8 @@ class GameScoreboard {
         
         this.game.load.text("Scoreboard", "https://accelerate-game.firebaseio.com/scoreboards/Peter.json");
 
-		
+        this.game.load.text("Scoreboard", "./board.json")  
+	
     }
 
     create(){
@@ -61,7 +62,7 @@ class GameScoreboard {
     this.rank = JSON.parse(this.game.cache.getText("Scoreboard"));
     var a = Object.keys(this.rank);
     var i = 0;
-
+g
     while(i < a.length) {
         data.push(this.rank[a[i]].playerName);
         i++;
@@ -174,5 +175,5 @@ class GameScoreboard {
         var score5 = game.add.text(0,500, data[4][0] + "   " + data[4][1]);
 
     }
-}
-*/
+}*/
+

@@ -5,6 +5,8 @@ class GamePreload {
         
         game.load.setPreloadSprite(loadingBar);
         game.load.bitmapFont("font", "Assets/sprites/face.png","Assets/sprites/font.fnt");
+        game.load.bitmapFont("thin", "Font/thin.png","Font/font.fnt");
+        game.load.bitmapFont("original","Font/font.png","Font/font.fnt");
 
         game.load.spritesheet("scoreboard", "Assets/sprites/score.png", 128, 128);
         game.load.spritesheet("door", "Assets/sprites/door.png", 98, 127);
@@ -55,7 +57,7 @@ class GamePreload {
 
     }
     create() {
-
+       
     }
     update() {
         game.state.start("GameTitleScreen");
