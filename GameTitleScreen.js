@@ -1,5 +1,6 @@
 class GameTitleScreen{
-    
+
+
     create(){
 
     var background = game.add.image(0,0,"background");
@@ -106,3 +107,4 @@ class GameTitleScreen{
         game.state.start("GameInstruction");
     }
 }
+

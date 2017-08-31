@@ -10,12 +10,15 @@ let score = 0;
 var speed = 5;
 var cursors;
 let health;
-let Peter
+let Peter;
+let playerName;
+
+
 
 class GameStart {
     
     preload() {
-        
+        playerName = prompt("What is your name?");
     }
     
     create() {
@@ -135,7 +138,7 @@ class GameStart {
 
     peterMove(e) {
         var x = e.gamma;
-        Peter.body.velocity.x += x * 0.5;
+        Peter.body.velocity.x += x * 20;
         if(Peter.x < 50) {
             Peter.x = 50;
         }
