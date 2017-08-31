@@ -6,44 +6,19 @@ let sunSpeed = 100;
 let sunLimit = 700;
 let score = 0;
 let fireSpeed = 400;
-let fireLimit = 280 + Math.random()*1000;
+let fireLimit = 150 + Math.random()*1000;
 var speed = 5;
 var cursors;
 let health;
+let Peter
 
 class GameStart {
     
     preload() {
         //audio 
-        game.load.audio("level1music","Assets/sounds/level1.mp3");
-        game.load.audio("level2","Assets/sounds/level2.mp3");
-        game.load.audio("level3","Assets/sounds/level3.mp3");
-        game.load.audio("Sip","Assets/sounds/sip.wav");
-        game.load.audio("Slurp","Assets/sounds/slurp.wav");
-        game.load.audio("lick","Assets/sounds/lick.wav");
-        game.load.audio("kiwi","Assets/sounds/kiwi.wav");
-        game.load.audio("ouch","Assets/sounds/ouch.wav");
-        game.load.audio("hurt","Assets/sounds/hurt.wav");
-        game.load.audio("shooting","Assets/sounds/shooting.wav");
-        game.load.audio("destroy","Assets/sounds/destroy.wav");
-        game.load.audio("gameover","Assets/sounds/gameover.wav");
-        game.load.audio("door","Assets/sounds/door.wav");
-        game.load.audio("bossstage","Assets/sounds/bossstage.wav");
+
         
-        game.load.image("Beach", "Assets/sprites/beach.png");
-        game.load.image("forest", "Assets/sprites/forest.png");
-        game.load.image("Kiwi", "Assets/sprites/Kiwi.png");
-        game.load.image("Desert", "Assets/sprites/desert.png");
-        game.load.image("Sun", "Assets/sprites/sun.png");
-        game.load.image("Water", "Assets/sprites/water.png");
-        game.load.image("paused", "Assets/sprites/paused.jpg");
-        game.load.image("arrow1", "Assets/sprites/arrow1.png");
-        game.load.image("SpaceBK", "Assets/sprites/starfield.jpg");
-        game.load.image("pausebutton", "Assets/sprites/pausebar.png");
-        game.load.image("Fire", "Assets/sprites/sunPower.png");
-        game.load.image("gameoversign","Assets/sprites/gameoversign.jpg");
-        game.load.image("background","Assets/sprites/gameoversign.jpg");
-        game.load.image("loading","Assets/sprites/loading.png")
+
     }
     
     create() {
@@ -59,13 +34,14 @@ class GameStart {
         var wall = game.add.tileSprite(0, 0, 160, game.height, "Wall");
         wall.tint = 0x131715;
 
-        this.Peter = game.add.sprite(220, 880, "Peter");
-        this.Peter.anchor.setTo(0.5);
-        this.Peter.scale.setTo(0.2);
-        this.Peter.animations.add('walk', [0,1,2,3]);
-        this.Peter.animations.play('walk', 10, true);
-        game.physics.enable(this.Peter);
-        this.Peter.body.collideWorldBounds = true;
+        Peter = game.add.sprite(220, 880, "Peter");
+        Peter.anchor.setTo(0.5);
+        Peter.scale.setTo(0.2);
+        Peter.animations.add('walk', [0,1,2,3]);
+        Peter.animations.play('walk', 10, true);
+        game.physics.enable(Peter);
+        Peter.body.collideWorldBounds = true;
+        Peter.body.velocity.x = 0;
 
         this.kiwis = game.add.group();
         this.kiwis.enablebody = true;
@@ -153,13 +129,23 @@ class GameStart {
         game.physics.enable(this.Lolo);
         this.Lolo.body.velocity.x = 100;
         this.Lolo.visible = false;
-        this.Lolo.health = 20;
+        this.Lolo.health = 30;
 
         this.fireSpeed = fireSpeed;
         this.fireGroup = game.add.group();    
         this.addFire(this.fireGroup);
-        
 
+        window.addEventListener("deviceorientation", this.peterMove, true);
+    
+    }
+
+
+    peterMove(e) {
+        var x = e.gamma;
+        Peter.body.velocity.x += x * 0.5;
+        if(Peter.x < 50) {
+            Peter.x = 50;
+        }
     }
     
     pausing() {
@@ -187,7 +173,6 @@ class GameStart {
 update() {
 
         let width = this.barConfig.width;
-        var Peter = this.Peter;
         var faces = this.faces;
         var Kiwi = this.Kiwi;
         var myHealthBar = this.myHealthBar;
@@ -200,27 +185,33 @@ update() {
         var sungroup = this.sunGroup;
         var firegroup = this.fireGroup;
         
-    
+        this.sprite = this.add.sprite(Peter.x, Peter.y);
+        game.physics.arcade.enable(this.sprite);
+        weapon.trackSprite(this.sprite, 0, 0); 
+        weapon.fireRate = 100;
+        weapon.multiFire = true;
+        cursors = this.input.keyboard.createCursorKeys();
+        this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+        this.sprite.body.velocity.x = 0;
+
         if(this.Lolo.x > 580) {
             this.Lolo.body.velocity.x = -100;
         } else if (this.Lolo.x < 200) {
             this.Lolo.body.velocity.x = 100;
         }
         
-        game.physics.arcade.overlap(this.Peter, Kiwi, function() {
+        game.physics.arcade.overlap(Peter, Kiwi, function() {
             Kiwi.kill();
-            var snd = game.add.audio("kiwi");
-            snd.play();
-            score += 1000;
+            score += 750;
             scorebar.text = "Score: \n" + score;
             faces.frame = 1;
         });
 
-        game.physics.arcade.overlap(this.Peter, Water, function() {
+        game.physics.arcade.overlap(Peter, Water, function() {
             Water.kill();
             var slurp = game.add.audio("slurp");
             slurp.play();
-            score += 3000;
+            score += 500;
             myHealthBar.setWidth(width + 40);
             barConfig.width += 40;
             health = Math.floor(barConfig.width / 1.5);
@@ -238,16 +229,16 @@ update() {
         }
        
         if(cursors.right.isDown) {
-            this.Peter.x += speed;
+            Peter.x += speed;
         }
         if (cursors.left.isDown) {
-            this.Peter.x -= speed;
+            Peter.x -= speed;
         }
-        if(this.Peter.x < 200) {
-            this.Peter.x = 200;
+        if(Peter.x < 200) {
+            Peter.x = 200;
         }
-        if(this.Peter.x > 620) {
-            this.Peter.x = 620;
+        if(Peter.x > 620) {
+            Peter.x = 620;
         }
 
         if(health > 75) {
@@ -280,8 +271,6 @@ update() {
         this.icecreamGroup.forEach(function(icecream) {
             game.physics.arcade.overlap(Peter, icecream, function() {
                 icecream.destroy();
-                var lick = game.add.audio("lick");
-                lick.play();
                 score += 500;
                 myHealthBar.setWidth(width + 10);
                 barConfig.width += 10;
@@ -298,8 +287,6 @@ update() {
         this.HotTeaGroup.forEach(function(tea) {
             game.physics.arcade.overlap(Peter, tea, function() {
                 tea.destroy();
-                var ouch = game.add.audio("ouch");
-                ouch.play('',0,0.5);
                 score -= 300;
                 
                 myHealthBar.setWidth(width - 15);
@@ -317,8 +304,6 @@ update() {
         this.sunGroup.forEach(function(sun) {
             game.physics.arcade.overlap(Peter, sun, function() {
                 sun.destroy();
-                var hurt = game.add.audio("hurt");
-                hurt.play('',0,0.5);
                 myHealthBar.setWidth(width - 20);
                 barConfig.width -= 20;
                 health = Math.floor(barConfig.width / 1.5);
@@ -335,7 +320,7 @@ update() {
                     weapons.kill();
                     var destroy = game.add.audio("destroy");
                     destroy.play('',0,0.5);
-                    if(sun.health === 0) {
+                    if(sun.health <= 0) {
                         score += 900;
                         myHealthBar.setWidth(width + 5);
                         barConfig.width += 5;
@@ -399,17 +384,8 @@ update() {
     
         }
         
-        if(score > 15000 && score < 20000) {
+        if(score > 15000 && score < 40000) {
             
-            this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
-            game.physics.arcade.enable(this.sprite);
-            weapon.trackSprite(this.sprite, 0, 0); 
-            weapon.fireRate = 100;
-            weapon.multiFire = true;
-            cursors = this.input.keyboard.createCursorKeys();
-            this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    
-            this.sprite.body.velocity.x = 0;
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -420,6 +396,10 @@ update() {
             if (this.fireButton.isDown) {
                 weapon.fireOffset(0, 0);
             }
+            this.game.input.onTap.add(function(game) {
+                weapon.fireOffset(0, 0);
+                weapon.fireRate = 50;
+            });
 
             speed = 10;
             this.BK.loadTexture("Desert");
@@ -428,11 +408,11 @@ update() {
             this.Kiwi.body.velocity.y = 0;
             this.Kiwi.y = -100;
             sunSpeed = 550;
-            sunLimit = 80;
+            sunLimit = 100;
             this.Water.body.velocity.y = 500;
         }
 
-        if (score > 20000) {
+        if (score > 40000) {
 
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
@@ -442,16 +422,6 @@ update() {
             this.fire.visible = true;
             sunSpeed = 0;
             this.sunGroup.destroy();
-
-            this.sprite = this.add.sprite(this.Peter.x, this.Peter.y);
-            game.physics.arcade.enable(this.sprite);
-            weapon.trackSprite(this.sprite, 0, 0); 
-            weapon.fireRate = 100;
-            weapon.multiFire = true;
-            cursors = this.input.keyboard.createCursorKeys();
-            this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    
-            this.sprite.body.velocity.x = 0;
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -464,6 +434,11 @@ update() {
             }
             
         }
+
+        this.game.input.onTap.add(function(game) {
+            weapon.fireOffset(0, 0);
+            weapon.fireRate = 10;
+        });
 
 //gameover transition 
    

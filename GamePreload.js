@@ -1,7 +1,8 @@
 class GamePreload {
     preload() {
         var loadingBar = this.add.sprite(game.width / 2, game.height / 2, "loading");
-		loadingBar.anchor.setTo(0.5);
+        loadingBar.anchor.setTo(0.5);
+        
         game.load.setPreloadSprite(loadingBar);
         game.load.bitmapFont("font", "Assets/sprites/face.png","Assets/sprites/font.fnt");
 
@@ -11,6 +12,7 @@ class GamePreload {
         game.load.spritesheet("instructions", "Assets/sprites/instructions.png", 767, 767);
         game.load.spritesheet("FacialExpression", "Assets/sprites/facialexpressions.png", 640, 640);
         game.load.spritesheet("Lolo", "Assets/sprites/LoLo.png", 96, 94);
+        game.load.spritesheet("MovingPeter", "Assets/sprites/PeterMove.png", 301.25, 426);
 
         game.load.image("HotTea", "Assets/sprites/HotTea.png");
         game.load.image("background", "Assets/sprites/background.jpg");
@@ -23,6 +25,18 @@ class GamePreload {
         game.load.image("gameovertext","Assets/sprites/gameovertext.png");
         game.load.image("scoreboardtext","Assets/sprites/scoreboardtext.png");
         game.load.image("home","Assets/sprites/home.png");
+        game.load.image("Beach", "Assets/sprites/beach.png");
+        game.load.image("forest", "Assets/sprites/forest.png");
+        game.load.image("Kiwi", "Assets/sprites/Kiwi.png");
+        game.load.image("Desert", "Assets/sprites/desert.png");
+        game.load.image("Sun", "Assets/sprites/sun.png");
+        game.load.image("Water", "Assets/sprites/water.png");
+        game.load.image("paused", "Assets/sprites/paused.jpg");
+        game.load.image("arrow1", "Assets/sprites/arrow1.png");
+        game.load.image("SpaceBK", "Assets/sprites/starfield.jpg");
+        game.load.image("pausebutton", "Assets/sprites/pausebar.png");
+        game.load.image("Fire", "Assets/sprites/sunPower.png");
+        
 
         game.load.audio("level1music","Assets/sounds/level1.mp3");
         game.load.audio("level2","Assets/sounds/level2.mp3");
@@ -38,6 +52,7 @@ class GamePreload {
         game.load.audio("gameover","Assets/sounds/gameover.wav");
         game.load.audio("door","Assets/sounds/door.wav");
         game.load.audio("bossstage","Assets/sounds/bossstage.wav");
+
     }
     create() {
 

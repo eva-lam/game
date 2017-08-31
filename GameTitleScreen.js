@@ -18,7 +18,7 @@ class GameTitleScreen{
     this.playButton.events.onInputOver.add(this.playOn, this);
     this.playButton.events.onInputOut.add(this.playOut, this);
 
-    this.scoreboard = game.add.button(game.width / 4 - 30, game.height - 150, "scoreboard", this.openScore);
+    this.scoreboard = game.add.button(game.width / 4 - 30, game.height - 150, "scoreboard", this.gameScoreboard);
     this.scoreboard.animations.add("move", [0,1,2]);
     this.scoreboard.anchor.setTo(0.5);
     this.scoreboard.scale.setTo(1);
@@ -26,7 +26,7 @@ class GameTitleScreen{
     this.scoreboard.events.onInputOver.add(this.scoreboardOn, this);
     this.scoreboard.events.onInputOut.add(this.scoreboardOut, this);
 
-    this.instruction = game.add.button((game.width / 2) + game.width/2/2 + 30, game.height - 150, "instructions");
+    this.instruction = game.add.button((game.width / 2) + game.width/2/2 + 30, game.height - 150, "instructions", this.gameInstruction);
     this.instruction.anchor.setTo(0.5);
     this.instruction.scale.setTo(0.15);
     this.instruction.inputEnabled = true;
@@ -42,6 +42,9 @@ class GameTitleScreen{
         
     }
 
+    gameScoreboard() {
+        game.state.start("GameScoreboard");
+    }
 
     
 
@@ -96,11 +99,9 @@ class GameTitleScreen{
     startGame(){
         console.log("playButton pressed");
         game.state.start("GameStart");
-
+    }
+    gameInstruction() {
+        game.state.start("GameInstruction");
     }
 
-    openScore(){
-        console.log("open scoreboard!");
-        game.state.start("ScoreBoard");
-    }
 }

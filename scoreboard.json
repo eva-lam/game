@@ -37,10 +37,13 @@
     {
     "name": "Katie",
     "score": "1000"
+<<<<<<< HEAD
     },
 
     {
     "name": "Watson",
     "score": "5678"
+=======
+>>>>>>> ace04b6ef7522a0f91571bf69fd2e8efc56fa30f
     }
 ]

@@ -8,7 +8,8 @@ window.onload = function() {
     game.state.add("GamePreload", GamePreload);
     game.state.start("Boot");
     game.state.add("GameOverScreen",GameOverScreen);
-    game.state.add("ScoreBoard",ScoreBoard);
+    game.state.add("GameInstruction", GameInstruction);
+    game.state.add("GameScoreboard", GameScoreboard);
 }
 class Boot {
     preload(){
