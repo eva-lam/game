@@ -1,0 +1,18 @@
+@import url(https://fonts.googleapis.com/css?family=Doppio+One);
+
+
+#gameover,#playhead{
+    position:adsolute;
+    visibility:hidden;
+}
+
+h1,h2,h3{
+    font-family:'Doppio One';
+    color:black;
+    text-align:center;
+}
+
+#restartButton{
+    border:2px solid white-space;
+    border-radius:10px; 
+}
