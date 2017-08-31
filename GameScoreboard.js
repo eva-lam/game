@@ -2,10 +2,9 @@ var data =[];
 
 class GameScoreboard {
     preload () {
-		game.load.json('core', 'scoreboard.json');
         // $(function(){ 
         //     $.ajax ({
-        //         url:"scoreboard.json"
+        //         url:“scoreboard.json”
         //     }) 
         //     .done(function(data){   
         //         $.each(data, function(key,value){
@@ -19,17 +18,23 @@ class GameScoreboard {
         //         });
         //     })
 		// });
-		data.sort((a,b) => {return b.score-a.score;});
-		
+        this.data = [];
+        $(function() {
+            $.ajax({
+                url: "./board.json"
+            }).done(function(data) {
+                $.each(data, function(item) {
+                    console.log(data[item].score);
+                    data.push(data[item].score);
+                });
+            });
+        });
+
+        this.game.load.text("Scoreboard", "./board.json")  
+	
     }
 
     create(){
-		
-		this.a = game.cache.getJSON("core");
-
-		console.log(this.a)
-
-		var score = game.add.text(0,100,data); 
 		
 		var background = game.add.image(0,0,"background");
 
@@ -47,15 +52,31 @@ class GameScoreboard {
 		this.home = game.add.button(game.width / 4 - 30, game.height - 150, "home", this.homePage);
 		this.home.anchor.setTo(-1.7,0.5);
 		this.home.scale.setTo(0.5);
-	    this.home.inputEnabled = true;
-	
+        this.home.inputEnabled = true;
+
+        
+        this.rank = JSON.parse(this.game.cache.getText("Scoreboard"));
+        
+            this.rank.forEach(function(item) {
+                data.push([item.name,item.score]);
+            }, this);
+
+            data.sort((a, b) => {return b - a;});
+    
+//adding font and style on display score 
+        var score1 = game.add.bitmapText(150,200,"original",data[0][0]+" "+ data[0][1]);
+        var score2 = game.add.bitmapText(150,250,"original",data[1][0] + " " + data[1][1]);
+        var score3 = game.add.bitmapText(150,300, "original",data[2][0] + " " + data[2][1]);
+        var score4 = game.add.bitmapText(150,350, "original",data[3][0] + " " + data[3][1]);
+        var score5 = game.add.bitmapText(150,400, "original",data[4][0] + " " + data[4][1]);
+	    
 		}
 		
 		update() {
 			
 		}
 	
-		playOn() {
+		playOn(){
 			this.playButton.animations.play("open", 5, true);
 			this.tween1 = game.add.tween(this.playButton).to({
 				width: 150,
@@ -64,13 +85,12 @@ class GameScoreboard {
 			this.tween1.yoyo(true);
 		}
 	
-		playOut() {
+		playOut(){
 			this.playButton.animations.stop();
 			this.playButton.frame = 0;
 			this.playButton.width = 98;
 			this.playButton.height = 127;
 			this.tween1.stop();
-			
 		}
 	
 		startGame(){
@@ -82,41 +102,7 @@ class GameScoreboard {
 		homePage (){
 			console.log("go to titlescreen!");
 			game.state.start("GameTitleScreen");
-		}
-    }
-
-/*
-var data = [];
-
-class GameScoreboard {
-    preload() {
-        game.load.json('Score', './scoreboard.json');
-        $(function() {
-            $.ajax({
-                url: "./scoreboard.json"
-            }).done(function(data) {
-                $.each(data, function(key,value) {
-                    data.push(value);
-                });
-            });
-        });
-        data.sort((a, b) => {return b - a;});
-    }
-    create() {
-
-        console.log(data);
-
-        this.a = game.cache.getJSON("Score");
-
-        this.a.forEach(function(item) {
-            data.push(item.score);
-        }, this);
-
-        data = data.sort(function(a,b) {
-            return b - a;
-        });
-
-        var score = game.add.text(0,100, data);
+		
     }
 }
-*/
+

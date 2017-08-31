@@ -102,7 +102,7 @@ class GameOverScreen {
 
 		openScore(){
 			console.log("open score!");
-			game.state.start("ScoreBoard");
+			game.state.start("GameScoreboard");
 	
 		}
 

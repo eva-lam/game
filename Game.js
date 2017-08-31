@@ -16,7 +16,7 @@ class Boot {
         game.load.image("loading","Assets/sprites/loading.png");
     }
 	create() {
-        game.stage.backgroundColor = "#999999";
+        game.stage.backgroundColor = "#C4EE99";
 		game.scale.pageAlignHorizontally = true;
 		game.scale.pageAlignVertically = true;
 		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
