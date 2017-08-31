@@ -225,7 +225,7 @@ update() {
         });
 
         if(Kiwi.y > 960) {
-            this.Kiwi.kill();
+            Kiwi.kill();
         }
 
         if(this.Water.y > 960) {
@@ -466,8 +466,18 @@ update() {
         game.paused = false;
         game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
             game.state.start("GameOverScreen", true, false); 
+            $(function() {
+                var input = JSON.stringify({playerName : score});
+                $.ajax({
+                    type: "POST",
+                    url: "https://accelerate-game.firebaseio.com/scoreboards/Peter.json",
+                    data: input,
+                    datatype: "json"
+                }).done(function() {
+                    console.log('HI');
+                });
+            });
         });
-        
     
     }
 

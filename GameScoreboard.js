@@ -18,18 +18,8 @@ class GameScoreboard {
         //         });
         //     })
 		// });
-        this.data = [];
-        $(function() {
-            $.ajax({
-                url: "./Scoreboard.json"
-            }).done(function(data) {
-                $.each(data, function(item) {
-                    console.log(data[item].score);
-                    data.push(data[item].score);
-                });
-            });
-        }); 
-        this.game.load.text("Scoreboard", "./Scoreboard.json");
+        
+        this.game.load.text("Scoreboard", "https://accelerate-game.firebaseio.com/scoreboards/Peter.json");
 
 		
     }
@@ -69,20 +59,25 @@ class GameScoreboard {
 
 
     this.rank = JSON.parse(this.game.cache.getText("Scoreboard"));
+    var a = Object.keys(this.rank);
+    var i = 0;
+
+    while(i < a.length) {
+        data.push(this.rank[a[i]].playerName);
+        i++;
+    }
     
-    this.rank.forEach(function(item) {
-        data.push([item.name, item.score] );
-    }, this);
 
     data.sort((a, b) => {return b - a;});
+    console.log(data);
 
-        
-    var score1 = game.add.text(200,300, data[0][0] + "   " + data[0][1]);
-    var score2 = game.add.text(200,400, data[1][0] + "   " + data[1][1]);
-    var score3 = game.add.text(200,500, data[2][0] + "   " + data[2][1]);
-    var score4 = game.add.text(200,600, data[3][0] + "   " + data[3][1]);
-    var score5 = game.add.text(200,700, data[4][0] + "   " + data[4][1]);
-		
+       
+    var score1 = game.add.text(200,300, data[0]);
+    var score2 = game.add.text(200,400, data[1]);
+    var score3 = game.add.text(200,500, data[2]);
+    var score4 = game.add.text(200,600, data[3]);
+    var score5 = game.add.text(200,700, data[4]);
+
 	
     }
 		
