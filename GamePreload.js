@@ -53,6 +53,7 @@ class GamePreload {
         game.load.audio("destroy","Assets/sounds/destroy.wav");
         game.load.audio("gameover","Assets/sounds/gameover.wav");
         game.load.audio("door","Assets/sounds/door.wav");
+        game.load.audio("upbeat","Assets/sounds/upbeat.wav");
         game.load.audio("bossstage","Assets/sounds/bossstage.wav");
 
     }

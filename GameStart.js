@@ -12,7 +12,7 @@ var cursors;
 let health;
 let Peter;
 let playerName;
-let Kiwi;
+let Kiwijai;
 
 
 
@@ -25,14 +25,13 @@ class GameStart {
     
     create() {
         console.log(playerName);
-        var background = game.add.image(0,0,"background");
-        this.level1music = game.add.audio("level1music");
-        this.level1music.play('',0,0.5);
+        this.upbeat = game.add.audio("upbeat");
+        this.upbeat.loopFull(0.6);
+        // this.upbeat.play('',0,0.5);
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.BK = this.game.add.tileSprite(160, 0, 480, 960, 'Beach');
-        
 
         var wall = game.add.tileSprite(0, 0, 160, game.height, "Wall");
         wall.tint = 0x131715;
@@ -50,11 +49,11 @@ class GameStart {
         this.kiwis.enablebody = true;
         game.physics.enable(this.kiwis);
 
-        Kiwi = this.kiwis.create(game.rnd.between(180, 600), -Math.floor(Math.random()+1000), "Kiwi");
-        game.physics.enable(Kiwi);
-        Kiwi.anchor.setTo(0.5);
-        Kiwi.scale.setTo(0.2);
-        Kiwi.events.onKilled.add(this.kiwiOut,this);
+        this.Kiwijai = this.kiwis.create(game.rnd.between(180, 600), -Math.floor(Math.random()+1000), "Kiwi");
+        game.physics.enable(this.Kiwijai);
+        this.Kiwijai.anchor.setTo(0.5);
+        this.Kiwijai.scale.setTo(0.2);
+        this.Kiwijai.events.onKilled.add(this.kiwiOut,this);
 
         this.icecreamSpeed = icecreamSpeed;
         this.icecreamGroup = game.add.group();
@@ -72,11 +71,11 @@ class GameStart {
         this.waters.enablebody = true;
         game.physics.enable(this.waters);
 
-        this.Water = this.waters.create(game.rnd.between(180, 620), -Math.floor(Math.random()+1000), "Water");
-        game.physics.enable(this.Water);
-        this.Water.anchor.setTo(0.5);
-        this.Water.scale.setTo(0.08);
-        this.Water.events.onKilled.add(this.waterOut,this);
+        this.Waterjai = this.waters.create(game.rnd.between(180, 620), -Math.floor(Math.random()+1000), "Water");
+        game.physics.enable(this.Waterjai);
+        this.Waterjai.anchor.setTo(0.5);
+        this.Waterjai.scale.setTo(0.08);
+        this.Waterjai.events.onKilled.add(this.waterOut,this);
         
         this.barConfig = {x: 45, y: 880, width:75, height: 80};
         this.myHealthBar = new HealthBar(this.game, this.barConfig);
@@ -165,13 +164,13 @@ class GameStart {
     };
 
     kiwiOut() {
-        Kiwi.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+1000));
-        Kiwi.body.velocity.y = 600;
+        this.Kiwijai.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+1000));
+        this.Kiwijai.body.velocity.y = 600;
     }
 
     waterOut() {
-        this.Water.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+800));
-        this.Water.body.velocity.y = 600;
+        this.Waterjai.reset(game.rnd.between(200, 600), -Math.floor(Math.random()+800));
+        this.Waterjai.body.velocity.y = 600;
     }
     
 //update 
@@ -181,13 +180,14 @@ update() {
         var faces = this.faces;
         var myHealthBar = this.myHealthBar;
         var healthNum = this.healthNum;
-        var Water = this.Water;
+        var Waterjai = this.Waterjai;
         var scorebar = this.scorebar;
         var weapon = this.weapon;
         var barConfig = this.barConfig;
         var Lolo = this.Lolo;
         var sungroup = this.sunGroup;
         var firegroup = this.fireGroup;
+        var Kiwijai = this.Kiwijai;
         
         this.sprite = this.add.sprite(Peter.x, Peter.y);
         game.physics.arcade.enable(this.sprite);
@@ -204,17 +204,15 @@ update() {
             this.Lolo.body.velocity.x = 100;
         }
         
-        game.physics.arcade.overlap(Peter, Kiwi, function() {
-            Kiwi.kill();
+        game.physics.arcade.overlap(Peter, Kiwijai, function() {
+            Kiwijai.kill();
             score += 750;
             scorebar.text = "Score: \n" + score;
             faces.frame = 1;
         });
 
-        game.physics.arcade.overlap(Peter, Water, function() {
-            Water.kill();
-            var slurp = game.add.audio("slurp");
-            slurp.play();
+        game.physics.arcade.overlap(Peter, Waterjai, function() {
+            Waterjai.kill();
             score += 500;
             myHealthBar.setWidth(width + 40);
             barConfig.width += 40;
@@ -224,12 +222,12 @@ update() {
             faces.frame = 1;
         });
 
-        if(Kiwi.y > 960) {
-            Kiwi.kill();
+        if(Kiwijai.y > 960) {
+            Kiwijai.kill();
         }
 
-        if(this.Water.y > 960) {
-            this.Water.kill();
+        if(this.Waterjai.y > 960) {
+            this.Waterjai.kill();
         }
        
         if(cursors.right.isDown) {
@@ -292,7 +290,6 @@ update() {
             game.physics.arcade.overlap(Peter, tea, function() {
                 tea.destroy();
                 score -= 300;
-                
                 myHealthBar.setWidth(width - 15);
                 barConfig.width -= 15;
                 health = Math.floor(barConfig.width / 1.5);
@@ -322,8 +319,6 @@ update() {
                 game.physics.arcade.overlap(weapons, sun, function() {
                     sun.damage(1);
                     weapons.kill();
-                    var destroy = game.add.audio("destroy");
-                    destroy.play('',0,0.5);
                     if(sun.health <= 0) {
                         score += 900;
                         myHealthBar.setWidth(width + 5);
@@ -379,8 +374,7 @@ update() {
         if(score > 7000 && score < 15000) {
             
             this.BK.loadTexture("forest");
-            
-            Kiwi.body.velocity.y = 600;
+            Kiwijai.body.velocity.y = 600;
             icecreamLimit = 100;
             icecreamSpeed = 500 + Math.random() * 100;
             HotTeaSpeed = 500 + Math.random() * 100;
@@ -389,8 +383,8 @@ update() {
         }
         
         if(score > 15000 && score < 40000) {
-            if(Kiwi.destroy !== true) {
-                Kiwi.destroy()
+            if(Kiwijai.destroy !== true) {
+                Kiwijai.destroy()
             }
             
             
@@ -415,7 +409,10 @@ update() {
             
             sunSpeed = 550;
             sunLimit = 100;
-            this.Water.body.velocity.y = 500;
+            if(this.Waterjai.destroy !== true) {
+                this.Waterjai.body.velocity.y = 500;
+            }
+            
         }
 
         if (score > 40000) {
@@ -423,8 +420,6 @@ update() {
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
             this.Lolo.visible = true;
-            var snd1 = game.add.audio("bossstage");
-            snd1.play();
             this.fire.visible = true;
             sunSpeed = 0;
             this.sunGroup.destroy();
@@ -459,8 +454,7 @@ update() {
         this.waters.destroy();
         
 
-        var snd2 = game.add.audio("gameover");
-        snd2.play();
+       
         
         this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
         this.gameoversign.anchor.setTo(0.5);
