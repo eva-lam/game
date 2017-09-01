@@ -406,8 +406,8 @@ update() {
             } else if(score > 7000 && score < 15000) {
             
             this.BK.loadTexture("forest");
-            if(Kiwi.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
-                Kiwi.body.velocity.y = 600;
+            if(this.kiwis.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
+                Kiwijai.body.velocity.y = 600;
             }
             
             icecreamLimit = 100;
@@ -417,7 +417,7 @@ update() {
     
         } else if(score > 15000 && score < 40000) {
             if(this.kiwis.destroy !== true) {
-                Kiwi.body.velocity.y = 0;
+                Kiwijai.body.velocity.y = 0;
             }
 
             if (cursors.left.isDown) {
@@ -442,7 +442,7 @@ update() {
             sunSpeed = 550;
             sunLimit = 100;
             if(this.waters.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
-                this.Water.body.velocity.y = 500;
+                this.Waterjai.body.velocity.y = 500;
             }
             
         } else if (score > 40000) {
