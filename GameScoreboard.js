@@ -19,7 +19,7 @@ class GameScoreboard {
         //     })
 		// });
         
-        this.game.load.text("Scoreboard", "https://accelerate-game.firebaseio.com/scoreboards/Peter.json");
+        this.game.load.text("Scoreboard", "https://accelerate-game.firebaseio.com/scoreboards/PeterIce.json");
 
         this.game.load.text("Scoreboard", "./board.json")  
 	
@@ -62,9 +62,9 @@ class GameScoreboard {
     this.rank = JSON.parse(this.game.cache.getText("Scoreboard"));
     var a = Object.keys(this.rank);
     var i = 0;
-g
+
     while(i < a.length) {
-        data.push(this.rank[a[i]].playerName);
+        data.push(this.rank[a[i]]);
         i++;
     }
     
@@ -73,11 +73,11 @@ g
     console.log(data);
 
        
-    var score1 = game.add.text(200,300, data[0]);
-    var score2 = game.add.text(200,400, data[1]);
-    var score3 = game.add.text(200,500, data[2]);
-    var score4 = game.add.text(200,600, data[3]);
-    var score5 = game.add.text(200,700, data[4]);
+    var score1 = game.add.text(200,300, data[0]["playerName"] + data[0]["score"]);
+    var score2 = game.add.text(200,400, data[1]["playerName"] + data[1]["score"]);
+    var score3 = game.add.text(200,500, data[2]["playerName"] + data[2]["score"]);
+    var score4 = game.add.text(200,600, data[3]["playerName"] + data[3]["score"]);
+    var score5 = game.add.text(200,700, data[4]["playerName"] + data[4]["score"]);
 
 	
     }

@@ -467,10 +467,10 @@ update() {
         game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
             game.state.start("GameOverScreen", true, false); 
             $(function() {
-                var input = JSON.stringify({playerName : score});
+                var input = JSON.stringify({"score" : score, "playerName" : playerName});
                 $.ajax({
                     type: "POST",
-                    url: "https://accelerate-game.firebaseio.com/scoreboards/Peter.json",
+                    url: "https://accelerate-game.firebaseio.com/scoreboards/PeterIce.json",
                     data: input,
                     datatype: "json"
                 }).done(function() {
