@@ -88,8 +88,8 @@ class GameScoreboard {
 
     array.forEach(function(item) {
         item.tint = 0xC10032;
-    })
-	
+    });
+
     }
 		
 		update() {

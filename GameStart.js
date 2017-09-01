@@ -369,25 +369,54 @@ update() {
          });
      });
 
+     if (health <=0 || health >= 100 || this.Lolo.health <= 0) {
         
+                this.sunGroup.destroy();
+                this.icecreamGroup.destroy();
+                this.fireGroup.destroy();
+                this.HotTeaGroup.destroy();
+                this.kiwis.destroy();
+                this.waters.destroy();
+                
+                var snd2 = game.add.audio("gameover");
+                snd2.play();
+                
+                this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
+                this.gameoversign.anchor.setTo(0.5);
         
-        if(score > 7000 && score < 15000) {
+                game.paused = false;
+                game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
+                    game.state.start("GameOverScreen", true, false); 
+                    $(function() {
+                        var input = JSON.stringify({"playerName" : playerName, "score" : score});
+                        $.ajax({
+                            type: "POST",
+                            url: "https://accelerate-game.firebaseio.com/scoreboards/PeterIce.json",
+                            data: input,
+                            datatype: "json"
+                        }).done(function() {
+                            console.log('HI');
+                        });
+                    });
+                });
+            
+            } else if(score > 7000 && score < 15000) {
             
             this.BK.loadTexture("forest");
-            Kiwijai.body.velocity.y = 600;
+            if(Kiwi.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
+                Kiwi.body.velocity.y = 600;
+            }
+            
             icecreamLimit = 100;
             icecreamSpeed = 500 + Math.random() * 100;
             HotTeaSpeed = 500 + Math.random() * 100;
             HotTeaLimit = 100;
     
-        }
-        
-        if(score > 15000 && score < 40000) {
-            if(Kiwijai.destroy !== true) {
-                Kiwijai.destroy()
+        } else if(score > 15000 && score < 40000) {
+            if(this.kiwis.destroy !== true) {
+                Kiwi.body.velocity.y = 0;
             }
-            
-            
+
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
             }
@@ -409,13 +438,11 @@ update() {
             
             sunSpeed = 550;
             sunLimit = 100;
-            if(this.Waterjai.destroy !== true) {
-                this.Waterjai.body.velocity.y = 500;
+            if(this.waters.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
+                this.Water.body.velocity.y = 500;
             }
             
-        }
-
-        if (score > 40000) {
+        } else if (score > 40000) {
 
             this.space = this.BK.loadTexture("SpaceBK");
             this.BK.tilePosition.y += 2;
@@ -444,38 +471,7 @@ update() {
 //gameover transition 
    
 
-    if (health <=0 || health >= 100 || this.Lolo.health <= 0) {
-
-        this.sunGroup.destroy();
-        this.icecreamGroup.destroy();
-        this.fireGroup.destroy();
-        this.HotTeaGroup.destroy();
-        this.kiwis.destroy();
-        this.waters.destroy();
-        
-
-       
-        
-        this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
-        this.gameoversign.anchor.setTo(0.5);
-
-        game.paused = false;
-        game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
-            game.state.start("GameOverScreen", true, false); 
-            $(function() {
-                var input = JSON.stringify({"playerName" : playerName, "score" : score});
-                $.ajax({
-                    type: "POST",
-                    url: "https://accelerate-game.firebaseio.com/scoreboards/PeterIce.json",
-                    data: input,
-                    datatype: "json"
-                }).done(function() {
-                    console.log('HI');
-                });
-            });
-        });
-    
-    }
+   
 
         // this.score = 0;
         // console.log(this.score);
