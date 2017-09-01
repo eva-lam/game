@@ -72,17 +72,17 @@ class GameScoreboard {
     data.sort((a, b) => {return b.score - a.score;});
     console.log(data);
 
-    var player1 = game.add.bitmapText(150,250, "font", data[0]["playerName"], 50);
-    var player2 = game.add.bitmapText(150,320, "font", data[1]["playerName"], 50);
-    var player3 = game.add.bitmapText(150,390, "font", data[2]["playerName"], 50);
-    var player4 = game.add.bitmapText(150,460, "font", data[3]["playerName"], 50);
-    var player5 = game.add.bitmapText(150,530, "font", data[4]["playerName"], 50);    
+    var player1 = game.add.bitmapText(120,250, "font", data[0]["playerName"], 55);
+    var player2 = game.add.bitmapText(120,320, "font", data[1]["playerName"], 55);
+    var player3 = game.add.bitmapText(120,390, "font", data[2]["playerName"], 55);
+    var player4 = game.add.bitmapText(120,460, "font", data[3]["playerName"], 55);
+    var player5 = game.add.bitmapText(120,530, "font", data[4]["playerName"], 55);    
        
-    var score1 = game.add.bitmapText(350,250, "font", data[0]["score"], 50);
-    var score2 = game.add.bitmapText(350,320, "font", data[1]["score"], 50);
-    var score3 = game.add.bitmapText(350,390, "font", data[2]["score"], 50);
-    var score4 = game.add.bitmapText(350,460, "font", data[3]["score"], 50);
-    var score5 = game.add.bitmapText(350,530, "font", data[4]["score"], 50);
+    var score1 = game.add.bitmapText(380,250, "font", data[0]["score"], 55);
+    var score2 = game.add.bitmapText(380,320, "font", data[1]["score"], 55);
+    var score3 = game.add.bitmapText(380,390, "font", data[2]["score"], 55);
+    var score4 = game.add.bitmapText(380,460, "font", data[3]["score"], 55);
+    var score5 = game.add.bitmapText(380,530, "font", data[4]["score"], 55);
 
     var array = [player1, player2, player3, player4, player5, score1, score2, score3, score4, score5]
 
