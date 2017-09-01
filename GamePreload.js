@@ -4,7 +4,7 @@ class GamePreload {
         loadingBar.anchor.setTo(0.5);
         
         game.load.setPreloadSprite(loadingBar);
-        game.load.bitmapFont("font", "Assets/sprites/face.png","Assets/sprites/font.fnt");
+        game.load.bitmapFont("font", "Assets/sprites/font.png","Assets/sprites/font.fnt");
         game.load.bitmapFont("thin", "Font/thin.png","Font/font.fnt");
         game.load.bitmapFont("original","Font/font.png","Font/font.fnt");
 

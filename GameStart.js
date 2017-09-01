@@ -389,8 +389,10 @@ update() {
         }
         
         if(score > 15000 && score < 40000) {
-            Kiwi.body.velocity.y = 0;
-            Kiwi.y = -100;
+            if(Kiwi.destroy !== true) {
+                Kiwi.destroy()
+            }
+            
             
             if (cursors.left.isDown) {
                 this.sprite.body.velocity.x = -200;
@@ -467,7 +469,7 @@ update() {
         game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
             game.state.start("GameOverScreen", true, false); 
             $(function() {
-                var input = JSON.stringify({"score" : score, "playerName" : playerName});
+                var input = JSON.stringify({"playerName" : playerName, "score" : score});
                 $.ajax({
                     type: "POST",
                     url: "https://accelerate-game.firebaseio.com/scoreboards/PeterIce.json",
