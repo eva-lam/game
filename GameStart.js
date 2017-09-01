@@ -381,8 +381,11 @@ update() {
                 var snd2 = game.add.audio("gameover");
                 snd2.play();
                 
+                
                 this.gameoversign = game.add.image(game.world.centerX, game.world.centerY, "gameoversign");
                 this.gameoversign.anchor.setTo(0.5);
+
+                game.sound.stopAll();
         
                 game.paused = false;
                 game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){
