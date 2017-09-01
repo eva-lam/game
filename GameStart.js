@@ -146,7 +146,7 @@ class GameStart {
 
     peterMove(e) {
         var x = e.gamma;
-        Peter.body.velocity.x += x * 20;
+        Peter.body.velocity.x += x;
         if(Peter.x < 50) {
             Peter.x = 50;
         }
@@ -406,8 +406,8 @@ update() {
             } else if(score > 7000 && score < 15000) {
             
             this.BK.loadTexture("forest");
-            if(Kiwi.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
-                Kiwi.body.velocity.y = 600;
+            if(this.kiwis.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
+                Kiwijai.body.velocity.y = 600;
             }
             
             icecreamLimit = 100;
@@ -442,8 +442,13 @@ update() {
             sunSpeed = 550;
             sunLimit = 100;
             if(this.waters.destroy !== true || (Peter.health > 0 && Peter.health < 100)) {
-                this.Water.body.velocity.y = 500;
+                this.Waterjai.body.velocity.y = 500;
             }
+
+            this.game.input.onTap.add(function(game) {
+                weapon.fireOffset(0, 0);
+                weapon.fireRate = 10;
+            });
             
         } else if (score > 40000) {
 
@@ -464,12 +469,14 @@ update() {
                 weapon.fireOffset(0, 0);
             }
             
+            this.game.input.onTap.add(function(game) {
+                weapon.fireOffset(0, 0);
+                weapon.fireRate = 10;
+            });
+            
         }
 
-        this.game.input.onTap.add(function(game) {
-            weapon.fireOffset(0, 0);
-            weapon.fireRate = 10;
-        });
+        
 
 //gameover transition 
    
