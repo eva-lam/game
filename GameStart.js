@@ -417,7 +417,7 @@ update() {
     
         } else if(score > 15000 && score < 40000) {
             if(this.kiwis.destroy !== true) {
-                Kiwi.body.velocity.y = 0;
+                Kiwijai.body.velocity.y = 0;
             }
 
             if (cursors.left.isDown) {
